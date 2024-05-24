@@ -72,27 +72,75 @@
 
 
 //apply
-let car1 = {
-  color: 'red',
-  company: 'ferrari'
-};
+// let car1 = {
+//   color: 'red',
+//   company: 'ferrari'
+// };
 
-function purchaseCar(currency, price) {
-  console.log(
-    `i have purchase ${this.color} and ${this.company} car for ${currency}${price}`
-    )
+// function purchaseCar(currency, price) {
+//   console.log(
+//     `i have purchase ${this.color} and ${this.company} car for ${currency}${price}`
+//     )
+// }
+
+// Function.prototype.myApply = function(context = {}, args=[]) {
+//   if (typeof this !== 'function') {
+//     throw new Error(this + 'its not callable')
+//   }
+
+//   if (!Array.isArray(args)) {
+//     throw new TypeError('createlistfromarraylike called on non-obj')
+//   }
+//   context.fn = this
+//   context.fn(...args)
+// }
+
+// purchaseCar.myApply(car1, ['rupee', 500000])
+
+
+// bind()
+// let car1 = {
+//   color: 'red',
+//   company: 'ferrari'
+// };
+
+// function purchaseCar(currency, price) {
+//   console.log(
+//     `i have purchase ${this.color} and ${this.company} car for ${currency}${price}`
+//     )
+// }
+
+// Function.prototype.myBind = function(context = {}, ...args) {
+//   if (typeof this !== 'function') {
+//     throw new Error(this + 'cannot be bound its not callable')
+//   }
+
+//   context.fn = this
+//   return function (...newArgs) {
+//     return context.fn(...args, ...newArgs)
+//   }
+// }
+
+// const newFunc = purchaseCar.myBind(car1, 'rupee')
+
+// console.log(newFunc(500000))
+
+// once()
+function once(func, context) {
+  let ran;
+
+  return function () {
+    if(func) {
+      ran = func.apply(context || this, arguments)
+      func = null
+    }
+
+    return ran
+  }
 }
 
-Function.prototype.myApply = function(context = {}, args=[]) {
-  if (typeof this !== 'function') {
-    throw new Error(this + 'its not callable')
-  }
+const hello = once((a, b) => console.log('hello', a, b))
 
-  if (!Array.isArray(args)) {
-    throw new TypeError('createlistfromarraylike called on non-obj')
-  }
-  context.fn = this
-  context.fn(...args)
-}
-
-purchaseCar.myApply(car1, ['rupee', 500000])
+hello(1, 2)
+hello(1, 2)
+hello(1, 2)
