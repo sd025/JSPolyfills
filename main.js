@@ -14,15 +14,34 @@
 
 
   // filter
-  Array. prototype.myFilter = function (cb) {
-    let temp = [];
+  // Array.prototype.myFilter = function (cb) {
+  //   let temp = [];
+  //   for (let i = 0; i < this.length; i++) {
+  //     if (cb(this[i], i, this)) temp.push(this[i]);
+  //   }
+  //   return temp;
+  // }
+  //   const nums = [1, 2, 3, 4];
+  //   const moreThanTwo = nums.filter ((num) => {
+  //   return num > 2;
+  // })
+  // console.log(moreThanTwo);
+
+  // reduce
+  Array.prototype.myReduce = function (cb, intialValue) {
+    var accumulator = intialValue;
+
     for (let i = 0; i < this.length; i++) {
-      if (cb(this[i], i, this)) temp.push(this[i]);
+      accumulator = accumulator ? cb(accumulator, this[i], i, this) : this[i];
     }
-    return temp;
+
+    return accumulator;
   }
     const nums = [1, 2, 3, 4];
-    const moreThanTwo = nums.filter ((num) => {
-    return num > 2;
-  })
-  console.log(moreThanTwo);
+
+    const sum = nums.myReduce((acc, curr, i, arr) => {
+    return acc + curr;
+  }, 0)
+  
+  console.log(sum);
+  
