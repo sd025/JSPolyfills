@@ -27,21 +27,72 @@
   // })
   // console.log(moreThanTwo);
 
+
   // reduce
-  Array.prototype.myReduce = function (cb, intialValue) {
-    var accumulator = intialValue;
+  // Array.prototype.myReduce = function (cb, intialValue) {
+  //   var accumulator = intialValue;
 
-    for (let i = 0; i < this.length; i++) {
-      accumulator = accumulator ? cb(accumulator, this[i], i, this) : this[i];
-    }
+  //   for (let i = 0; i < this.length; i++) {
+  //     accumulator = accumulator ? cb(accumulator, this[i], i, this) : this[i];
+  //   }
 
-    return accumulator;
+  //   return accumulator;
+  // }
+  //   const nums = [1, 2, 3, 4];
+
+  //   const sum = nums.myReduce((acc, curr, i, arr) => {
+  //   return acc + curr;
+  // }, 0)
+  
+  // console.log(sum);
+
+
+  // call
+// let car1 = {
+//   color: 'red',
+//   company: 'ferrari'
+// };
+
+// function purchaseCar(currency, price) {
+//   console.log(
+//     `i have purchase ${this.color} and ${this.company} car for ${currency}${price}`
+//     )
+// }
+
+// Function.prototype.myCall = function(context = {}, ...args) {
+//   if (typeof this !== 'function') {
+//     throw new Error(this + 'its not callable')
+//   }
+
+//   context.fn = this
+//   context.fn(...args)
+// }
+
+// purchaseCar.myCall(car1, 'rupee', 500000)
+
+
+//apply
+let car1 = {
+  color: 'red',
+  company: 'ferrari'
+};
+
+function purchaseCar(currency, price) {
+  console.log(
+    `i have purchase ${this.color} and ${this.company} car for ${currency}${price}`
+    )
+}
+
+Function.prototype.myApply = function(context = {}, args=[]) {
+  if (typeof this !== 'function') {
+    throw new Error(this + 'its not callable')
   }
-    const nums = [1, 2, 3, 4];
 
-    const sum = nums.myReduce((acc, curr, i, arr) => {
-    return acc + curr;
-  }, 0)
-  
-  console.log(sum);
-  
+  if (!Array.isArray(args)) {
+    throw new TypeError('createlistfromarraylike called on non-obj')
+  }
+  context.fn = this
+  context.fn(...args)
+}
+
+purchaseCar.myApply(car1, ['rupee', 500000])
