@@ -126,21 +126,48 @@
 // console.log(newFunc(500000))
 
 // once()
-function once(func, context) {
-  let ran;
+// function once(func, context) {
+//   let ran;
 
-  return function () {
-    if(func) {
-      ran = func.apply(context || this, arguments)
-      func = null
+//   return function () {
+//     if(func) {
+//       ran = func.apply(context || this, arguments)
+//       func = null
+//     }
+
+//     return ran
+//   }
+// }
+
+// const hello = once((a, b) => console.log('hello', a, b))
+
+// hello(1, 2)
+// hello(1, 2)
+// hello(1, 2)
+
+// memoize()
+function myMemoize (fn, context){
+  const res = {};
+  return function (...args) {
+    var argsCache = JSON.stringify(args)
+    if (!res[argsCache]) {
+      res[argsCache] = fn.call(context || this, ...args)
     }
-
-    return ran
+    return res[argsCache]
   }
 }
 
-const hello = once((a, b) => console.log('hello', a, b))
+const clumsyPorduct = (num1, num2) => {
+  for ( let i = 1; i <= 100000000; i++){}
+  return num1 * num2
+}
 
-hello(1, 2)
-hello(1, 2)
-hello(1, 2)
+const memoizedClumzyProduct= myMemoize(clumsyPorduct)
+
+console.log('fisrt')
+console.log(memoizedClumzyProduct(3932, 3133))
+console.log('fisrt')
+
+console.log('second')
+console.log(memoizedClumzyProduct(3932, 3133))
+console.log('second')
