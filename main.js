@@ -145,29 +145,93 @@
 // hello(1, 2)
 // hello(1, 2)
 
+
 // memoize()
-function myMemoize (fn, context){
-  const res = {};
-  return function (...args) {
-    var argsCache = JSON.stringify(args)
-    if (!res[argsCache]) {
-      res[argsCache] = fn.call(context || this, ...args)
+// function myMemoize (fn, context){
+//   const res = {};
+//   return function (...args) {
+//     var argsCache = JSON.stringify(args)
+//     if (!res[argsCache]) {
+//       res[argsCache] = fn.call(context || this, ...args)
+//     }
+//     return res[argsCache]
+//   }
+// }
+
+// const clumsyPorduct = (num1, num2) => {
+//   for ( let i = 1; i <= 100000000; i++){}
+//   return num1 * num2
+// }
+
+// const memoizedClumzyProduct= myMemoize(clumsyPorduct)
+
+// console.log('fisrt')
+// console.log(memoizedClumzyProduct(3932, 3133))
+// console.log('fisrt')
+
+// console.log('second')
+// console.log(memoizedClumzyProduct(3932, 3133))
+// console.log('second')
+
+
+// basic promiese implementation
+function myPromisePolyfill(executor) {
+  let onResolve,
+  onReject, 
+  isFulfilled = false,
+  isRejected = false,
+  isCalled = false,
+  value;
+  
+
+  function resolve(val) {
+    isFulfilled = true
+    value = val;
+    if (typeof onResolve === 'function'){
+      onResolve(val)
+      isCalled = true;
     }
-    return res[argsCache]
   }
+  function reject(val) {
+    isRejected = true
+    value = val;
+    if (typeof onReject === 'function'){
+      onReject(val)
+      isCalled = true;
+    }
+  }
+  
+
+  this.then = function(callback) {
+    onResolve = callback
+
+    if (isFulfilled && !isCalled) {
+      isCalled = true
+      onResolve(value)
+    }
+    return this;
+  }
+  
+  this.catch = function(callback) {
+    onReject = callback
+
+
+    if (isRejected && !isCalled) {
+      isCalled = true
+      onReject(value)
+    }
+    return this;
+  }
+
+  executor(resolve, reject)
 }
 
-const clumsyPorduct = (num1, num2) => {
-  for ( let i = 1; i <= 100000000; i++){}
-  return num1 * num2
-}
+const examplePromise = new myPromisePolyfill((res, rej)=> {
+  setTimeout(()=> {
+    res(2)
+  }, 1000)
+})
 
-const memoizedClumzyProduct= myMemoize(clumsyPorduct)
-
-console.log('fisrt')
-console.log(memoizedClumzyProduct(3932, 3133))
-console.log('fisrt')
-
-console.log('second')
-console.log(memoizedClumzyProduct(3932, 3133))
-console.log('second')
+examplePromise.then((resolve)=>{
+  console.log(resolve)
+}).catch((err) => console.log(err))
