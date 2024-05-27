@@ -175,63 +175,122 @@
 
 
 // basic promiese implementation
-function myPromisePolyfill(executor) {
-  let onResolve,
-  onReject, 
-  isFulfilled = false,
-  isRejected = false,
-  isCalled = false,
-  value;
+// function myPromisePolyfill(executor) {
+//   let onResolve,
+//   onReject, 
+//   isFulfilled = false,
+//   isRejected = false,
+//   isCalled = false,
+//   value;
   
 
-  function resolve(val) {
-    isFulfilled = true
-    value = val;
-    if (typeof onResolve === 'function'){
-      onResolve(val)
-      isCalled = true;
-    }
-  }
-  function reject(val) {
-    isRejected = true
-    value = val;
-    if (typeof onReject === 'function'){
-      onReject(val)
-      isCalled = true;
-    }
-  }
+//   function resolve(val) {
+//     isFulfilled = true
+//     value = val;
+//     if (typeof onResolve === 'function'){
+//       onResolve(val)
+//       isCalled = true;
+//     }
+//   }
+//   function reject(val) {
+//     isRejected = true
+//     value = val;
+//     if (typeof onReject === 'function'){
+//       onReject(val)
+//       isCalled = true;
+//     }
+//   }
   
 
-  this.then = function(callback) {
-    onResolve = callback
+//   this.then = function(callback) {
+//     onResolve = callback
 
-    if (isFulfilled && !isCalled) {
-      isCalled = true
-      onResolve(value)
-    }
-    return this;
-  }
+//     if (isFulfilled && !isCalled) {
+//       isCalled = true
+//       onResolve(value)
+//     }
+//     return this;
+//   }
   
-  this.catch = function(callback) {
-    onReject = callback
+//   this.catch = function(callback) {
+//     onReject = callback
 
 
-    if (isRejected && !isCalled) {
-      isCalled = true
-      onReject(value)
-    }
-    return this;
-  }
+//     if (isRejected && !isCalled) {
+//       isCalled = true
+//       onReject(value)
+//     }
+//     return this;
+//   }
 
-  executor(resolve, reject)
-}
+//   executor(resolve, reject)
+// }
 
-const examplePromise = new myPromisePolyfill((res, rej)=> {
-  setTimeout(()=> {
-    res(2)
-  }, 1000)
-})
+// const examplePromise = new myPromisePolyfill((res, rej)=> {
+//   setTimeout(()=> {
+//     res(2)
+//   }, 1000)
+// })
 
-examplePromise.then((resolve)=>{
-  console.log(resolve)
-}).catch((err) => console.log(err))
+// examplePromise.then((resolve)=>{
+//   console.log(resolve)
+// }).catch((err) => console.log(err))
+
+
+// Promise.all()
+// function importantAction(vid) {
+//   return new Promise((res,rej)=>{
+//     setTimeout(() => {
+//       res(`Subscribe the ${vid}`)
+//     }, 10);  
+//   })
+// }
+// function likeVid(vid) {
+//   return new Promise((res,rej)=>{
+//     setTimeout(() => {
+//       rej(`Like the ${vid}`)
+//     }, 10);  
+//   })
+// }
+
+// function commentVid(vid) {
+//   return new Promise((res,rej)=>{
+//     setTimeout(() => {
+//       res(`Comment the ${vid}`)
+//     }, 10);  
+//   })
+// }
+
+// Promise.allPollyfill = (promises) => {
+//   return new Promise((resolve,rej)=>{
+//     const results= []
+    
+//     if (!promises.length) {
+//       resolve(results)
+//       return
+//     }
+    
+//     let pending = promises.length
+    
+//     promises.forEach((promise, idx) => {
+//       Promise.resolve(promise).then((res)=>{
+//         results[idx] = res
+//         pending--
+        
+//         if (pending === 0){
+//           resolve(results)
+//         }
+//       }, rej)
+//     })
+//   })
+// }
+
+// Promise.allPollyfill([
+//   importantAction('subscriber'),
+//   likeVid('liker'),
+//   commentVid('commenter')
+//   ]).then((res)=> console.log(res)).catch((err)=> console.log('failed',err))
+  
+  
+  
+  // debounce()
