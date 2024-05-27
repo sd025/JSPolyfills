@@ -294,3 +294,31 @@
   
   
   // debounce()
+  const btn = document.queryselector('.increment_btn')
+const btnpress = document.queryselector('.increment_pressed')
+const count = document.queryselector('.increment_count')
+
+var triggerCount = 0
+var pressedCount = 0
+
+const myDebounce = (cb, d) => {
+  let timer;
+  
+  return function(...args){
+    if(timer) clearTimeout(timer)
+    timer = setTimeout(() => {
+      cb(...args)
+    }, d);
+  }
+}
+
+const debouncedCount = myDebounce(()=> {
+  triggerCount += 1
+  count.innerHTML = triggerCount
+}, 800)
+
+btn.addEventListener('click', () => {
+  btnpress.innerHTML = ++pressedCount
+  
+  debouncedCount()
+})
