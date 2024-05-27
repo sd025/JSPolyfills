@@ -294,31 +294,73 @@
   
   
   // debounce()
-  const btn = document.queryselector('.increment_btn')
-const btnpress = document.queryselector('.increment_pressed')
-const count = document.queryselector('.increment_count')
-
-var triggerCount = 0
-var pressedCount = 0
-
-const myDebounce = (cb, d) => {
-  let timer;
+  // const btns = document.querySelectorAll('.increment_btn'); 
+  // const btnpress = document.querySelectorAll('.increment_pressed');
+  // const count = document.querySelectorAll('.increment_count');
   
-  return function(...args){
-    if(timer) clearTimeout(timer)
-    timer = setTimeout(() => {
-      cb(...args)
-    }, d);
-  }
-}
-
-const debouncedCount = myDebounce(()=> {
-  triggerCount += 1
-  count.innerHTML = triggerCount
-}, 800)
-
-btn.addEventListener('click', () => {
-  btnpress.innerHTML = ++pressedCount
+  // var triggerCount = 0;
+  // var pressedCount = 0;
   
-  debouncedCount()
-})
+  // const myDebounce = (cb, d) => {
+  //   let timer;
+    
+  //   return function(...args){
+  //     if(timer) clearTimeout(timer);
+  //     timer = setTimeout(() => {
+  //       cb(...args);
+  //     }, d);
+  //   };
+  // };
+  
+  // const debouncedCount = myDebounce(() => {
+  //   triggerCount += 1;
+  //   count.forEach(el => el.innerHTML = triggerCount); 
+  // }, 800);
+  
+  // btns.forEach(btn => {
+  //   btn.addEventListener('click', () => {
+  //     pressedCount += 1;
+  //     btnpress.forEach(el => el.innerHTML = pressedCount); 
+      
+  //     debouncedCount();
+  //   });
+  // });
+  
+
+
+  // throttle
+  const btns = document.querySelectorAll('.increment_btn'); 
+  const btnpress = document.querySelectorAll('.increment_pressed');
+  const count = document.querySelectorAll('.increment_count');
+  
+  var triggerCount = 0;
+  var pressedCount = 0;
+  
+const start = new Date().getTime()
+  const myThrottle = (cb, d) => {
+    let last = 0;
+    
+    return (...args) => {
+      let now = new Date().getTime()
+      if (now - last < d) return;
+        last = now
+        return cb(...args)
+      }
+    };
+  
+  const throttled = myThrottle(() => {
+    triggerCount += 1;
+    count.forEach(el => el.innerHTML = triggerCount); // Update all elements in the NodeList
+  }, 1000);
+  
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btnpress.forEach(el => el.innerHTML = pressedCount); // Update all elements in the NodeList
+      const now = new Date().getTime()
+      const seconds = (now - start) / 1000
+      console.log(seconds.toFixed())
+      
+      throttled();
+    });
+  });
+  
